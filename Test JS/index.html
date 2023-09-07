@@ -1,3 +1,5 @@
+<!-- Icons from https://www.flaticon.com -->
+
 <html>
     <head>
         <link rel="stylesheet" href="styles.css">
@@ -5,32 +7,31 @@
 
     <h3>CMC Homework Editor&nbsp;</h3>
 
-    <canvas id="myCanvas" width= "650" height="400" style="border:4px solid #d3d3d3;">
+    <canvas id="myCanvas" width= "650" height="500" style="border:4px solid #d3d3d3; margin-left: 10px;">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
 
     <div>
-        <p>
-            <button id="clearCanvas">Clear</button>
-            <button id="saveCanvas">Save</button>
-            <button id="uploadPDF">Upload PDF</button>
-            <button id="prevPage">Previous Page</button>
-            <button id="nextPage">Next Page</button> 
-            <button id="zoomIn">Zoom In</button>
-            <button id="zoomOut">Zoom Out</button>
-            <button id="undo">Undo</button>
-            <button id="erase">Erase</button>
-            <button id="draw">Draw</button>
-            <input style="background-color:white;" type="color" id="colorPicker">
+            <input type="image" src="assets/pencil.png" class = "icon-button" id="draw" alt = "Draw"/>
+            <input type="image" src="assets/eraser.png" class = "icon-button" id="erase" alt = "Erase"/>
+            <input type="image" src="assets/arrow.png" class = "icon-button" id="undo" alt = "Undo"/>
+            <input type="image" src="assets/broom.png" class = "icon-button" id="clearCanvas" alt = "Clear"/>
+            <input type="image" src="assets/diskette.png" class = "icon-button" id="saveCanvas" alt = "Save"/>
+            <input type="image" src="assets/upload.png" class = "icon-button" id="uploadPDF" alt = "Upload"/>
+            <input type="image" src="assets/left.png" class = "icon-button" id="prevPage" alt = "Previous"/>
+            <input type="image" src="assets/arrow-right.png" class = "icon-button" id="nextPage" alt = "Next"/>
+            <input type="image" src="assets/zoom-in.png" class = "icon-button" id="zoomIn" alt = "Zoom In"/>
+            <input type="image" src="assets/zoom-out.png" class = "icon-button" id="zoomOut" alt = Zoom Out"/>
+            <input type="color" class = "color-box" id="colorPicker" value = "#000000">
             <input type="file" id="pdfUploader" accept="application/pdf" style="display: none">
-        </p>
     </div>
 
     <div>   
-        <h5 style="color:red;font-weight:500;"> Make sure to save your work before moving to the next page </h5>
+        <h5 style="color:red; font-weight:400; font-size: 15; position:absolute; margin-left: 125px; margin-top: 50px;"> Make sure to save your work before moving to the next page </h5>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
     <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
     <script src="script.js"></script>
 </html>
+

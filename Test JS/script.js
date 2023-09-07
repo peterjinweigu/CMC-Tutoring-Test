@@ -4,11 +4,13 @@ var ctx = canvas.getContext('2d');
 var painting = false;
 var erasing = false;
 var color = '#000000';
+var eraseColor = '#FFFFFF';
 var pdfDoc = null;
 var pageNum = 1;
 var zoomLevel = 1.0;
 var regularZoom = 1.0;
 var inAction = false;
+var prevCanvas = []; // unironically I think this is actually the way to go
 
 function renderPage(num) {
     pdfDoc.getPage(num).then(function(page) {
@@ -30,8 +32,8 @@ document.getElementById('colorPicker').onchange = function() {
 }
 
 function startAction(e) {
-    ctx.save();
     inAction = true;
+    prevCanvas.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
     if (erasing) {
         startErase(e);
     } else {
@@ -41,11 +43,7 @@ function startAction(e) {
 
 function endAction(e) {
     inAction = false;
-    if (erasing) {
-        endErase();
-    } else {
-        endDraw();
-    }
+    ctx.beginPath();
 }
 
 function action(e) {
@@ -59,12 +57,8 @@ function action(e) {
 
 function startDraw(e) {
     painting = true;
+    erasing = false;
     draw(e);
-}
-
-function endDraw() {
-    painting = false;
-    ctx.beginPath();
 }
 
 function draw(e) {
@@ -85,19 +79,16 @@ function draw(e) {
 
 function startErase(e) {
     erasing = true;
+    painting = false;
     erase(e);
-}
-
-function endErase() {
-    erasing = false;
-    ctx.beginPath();
 }
 
 function erase(e) {
     if (!erasing) return;
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.lineWidth = 20;
+    // ctx.globalCompositeOperation = 'destination-out';
+    ctx.lineWidth = 30;
     ctx.lineCap = 'round';
+    ctx.strokeStyle = eraseColor; // modern problems require modern solutions
 
     var rect = canvas.getBoundingClientRect();
     var x = e.clientX - rect.left;
@@ -169,14 +160,14 @@ function resumeWriting() {
     ctx.globalCompositeOperation = 'source-over';
 }
 
-function resumeErasing() { // consistency, js lambda is disgusting
+function resumeErasing() {
     erasing = true;
     painting = false;
 }
 
 function undo() {
-    console.log("Restored");
-    ctx.restore();
+    if (prevCanvas.length == 0) return;
+    ctx.putImageData(prevCanvas.pop(), 0, 0);
 }
 
 document.getElementById('clearCanvas').addEventListener('click', clearCanvas);
@@ -192,3 +183,10 @@ document.getElementById('zoomOut').addEventListener('click', zoomOut);
 canvas.addEventListener('mousedown', startAction);
 canvas.addEventListener('mouseup', endAction);
 canvas.addEventListener('mousemove', action);
+
+// Cheeky keyboard shortcuts (dosen't work on mac?)
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'z') {
+      undo();
+    }
+  });
